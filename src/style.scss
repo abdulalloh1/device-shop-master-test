@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f0f0f0;
+}
+
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+
+  &__title {
+    margin-bottom: 15px;
+  }
+
+  &__form {
+    width: 400px;
+  }
+
+  &__action-btns {
+    margin: 0 auto;
+  }
+}
+
+.products {
+  display: flex;
+  flex-direction: column;
+
+  &__create-btn {
+    margin-left: auto;
+    margin-bottom: 20px;
+  }
+}
