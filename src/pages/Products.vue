@@ -19,19 +19,26 @@ const categoryStore = useCategoryStore();
 const products = ref<ProductType[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(10);
-const perPage = ref<number>(1);
+const perPage = ref<number>(5);
 
+const isLoading = ref<boolean>(false);
 const isDialogOpen = ref<boolean>(false);
 const selectedProduct = ref<ProductType | null>(null);
 
 async function getProducts(filters = {}) {
-  const { data, headers } = await productApi.getProducts({
-    _page: currentPage.value,
-    _limit: perPage.value,
-    ...filters
-  })
-  products.value = data;
-  totalPages.value = parseLinkHeaderAndGetLastPage(headers.link);
+  isLoading.value = true;
+  try {
+    const { data, headers } = await productApi.getProducts({
+      _page: currentPage.value,
+      _limit: perPage.value,
+      ...filters
+    })
+    products.value = data;
+    totalPages.value = parseLinkHeaderAndGetLastPage(headers.link);
+  }
+  finally {
+    isLoading.value = false;
+  }
 }
 
 async function deleteProduct(id: number) {
@@ -111,6 +118,12 @@ watch(isDialogOpen, (newValue) => {
       Создать новый продукт
     </el-button>
 
+    <el-progress
+        v-if="isLoading"
+        :percentage="100"
+        :indeterminate="true"
+        :duration="1"
+    />
     <el-table
         :data="products"
         style="width: 100%"
