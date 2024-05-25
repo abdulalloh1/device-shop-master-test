@@ -19,7 +19,7 @@ const debounceFilter = debounce(() => {
   emit('filter', filters.value)
 }, 500)
 
-watch(() => filters.value.category_like, (newValue) => {
+watch(() => filters.value.category_like, () => {
   emit('filter', filters.value)
 });
 </script>

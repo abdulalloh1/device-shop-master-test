@@ -35,7 +35,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid) => {
     if (valid) {
       await authApi.login(loginForm.value)
-          .then(({ data }: AuthResponseType) => {
+          .then(({ data }: { data: AuthResponseType }) => {
             authTokenCache.set(data.accessToken);
             authUserCache.setStringified(data.user);
             router.push({ name: 'Home' });

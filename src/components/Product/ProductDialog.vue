@@ -24,7 +24,7 @@ const computedModelValue = computed({
 const dialogForm = ref<ProductType>({
   model: '',
   releaseYear: '',
-  category: '',
+  category: null,
   price: '',
   createdAt: new Date(),
   isVisible: true,
@@ -42,7 +42,7 @@ watch(computedModelValue, (newValue) => {
   dialogForm.value = {
     model: '',
     releaseYear: '',
-    category: '',
+    category: null,
     price: '',
     createdAt: new Date(),
     isVisible: true,
@@ -90,8 +90,8 @@ watch(() => props.product, (newValue) => {
       <el-form-item label="Рекомендуемая розничная цена">
         <el-input
             v-model="dialogForm.price"
-            :formatter="(value) => `${value}`.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-            :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+            :formatter="(value: string) => `${value}`.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+            :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')"
             suffix-icon="sum"
         >
           <template #append>SUM</template>

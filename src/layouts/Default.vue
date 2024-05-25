@@ -36,7 +36,7 @@ function logOut() {
         <div class="toolbar">
           <el-dropdown>
             <el-button>
-              {{ JSON.parse(authUserCache.get())?.email }}
+              {{ authUserCache.get() ? JSON.parse(authUserCache.get()!).email : null }}
             </el-button>
             <template #dropdown>
               <el-dropdown-menu>

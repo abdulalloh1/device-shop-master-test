@@ -19,19 +19,19 @@ const categoryStore = useCategoryStore();
 const products = ref<ProductType[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(10);
-const perPage = ref<number>(5);
+const perPage = ref<number>(1);
 
 const isDialogOpen = ref<boolean>(false);
-const selectedProduct = ref(null);
+const selectedProduct = ref<ProductType | null>(null);
 
 async function getProducts(filters = {}) {
-  const { data, headers }: {data: ProductType[]} = await productApi.getProducts({
+  const { data, headers } = await productApi.getProducts({
     _page: currentPage.value,
     _limit: perPage.value,
     ...filters
   })
   products.value = data;
-  totalPages.value = parseLinkHeaderAndGetLastPage(headers.get('Link'));
+  totalPages.value = parseLinkHeaderAndGetLastPage(headers.link);
 }
 
 async function deleteProduct(id: number) {
@@ -45,7 +45,7 @@ async function deleteProduct(id: number) {
           toast.success('Продукт успешно удален');
           await getProducts();
         } catch (error) {
-          toast.error(axios.isAxiosError(error) ? error.response?.data : error.message);
+          toast.error(axios.isAxiosError(error) && error.response?.data);
         }
       })
 }
@@ -65,14 +65,14 @@ function handlePerPageChange(number: number) {
   getProducts();
 }
 
-function updateProductHandler(product) {
+function updateProductHandler(product: ProductType) {
   selectedProduct.value = product;
   isDialogOpen.value = true;
 }
 
 async function submitForm(form: ProductType) {
   try {
-    if (selectedProduct.value) {
+    if (selectedProduct.value?.id) {
       await productApi.updateProduct(selectedProduct.value.id, form);
       toast.success('Продукт успешно обновлен');
     } else {
